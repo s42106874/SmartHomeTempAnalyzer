@@ -1,5 +1,10 @@
 # 智慧居家溫度彙整器
 
+![操作介面](docs/screenshot-gui.png)
+
+![產生的彙整報告](docs/screenshot-report.png)
+
+
 ## 功能
 處理智慧居家感測器數據，彙整房間溫度報告，支援多房間、多天數據分析。
 
