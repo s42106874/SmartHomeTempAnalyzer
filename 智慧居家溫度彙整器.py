@@ -32,7 +32,7 @@ def process_file(file_path: str, room_name: str) -> Tuple:
         return tuple([None] * 4)
     
     # 計算平均溫度和最高溫度
-    avg_temp = filtered_data['Temperature'].mean()
+    avg_temp = round(filtered_data['Temperature'].mean(), 2)
     max_temp = filtered_data['Temperature'].max()
     time_range = f"{filtered_data['Time'].min()} - {filtered_data['Time'].max()}"
     record_count = len(filtered_data)
@@ -45,7 +45,7 @@ def process_file(file_path: str, room_name: str) -> Tuple:
 
 def extract_room_name(file_name: str) -> Optional[str]:
     """從文件名提取房間名稱"""
-    match = re.search(r'(LivingRoom|Bedroom|Kitchen)_', file_name, re.IGNORECASE)
+    match = re.search(r'([A-Za-z]+)_Day\d+', file_name, re.IGNORECASE)
     return match.group(1) if match else None
 
 def extract_day_number(file_name: str) -> Optional[int]:
@@ -58,13 +58,15 @@ def color_based_on_room(room: str) -> Optional[PatternFill]:
     color_map = {
         'LivingRoom': 'FFCCCB',  # 淺紅
         'Bedroom': 'ADD8E6',    # 淺藍
-        'Kitchen': '90EE90'     # 淺綠
+        'Kitchen': '90EE90',    # 淺綠
+        'Bathroom': 'FFF2CC',   # 淺黃
+        'Study': 'E4DFEC'       # 淺紫
     }
     return PatternFill(start_color=color_map.get(room), end_color=color_map.get(room), fill_type='solid') if room in color_map else None
 
 def check_file_name_format(file_name: str) -> bool:
-    """檢查檔案名稱是否包含 LivingRoom_DayX 或 Bedroom_DayX 格式"""
-    pattern = r'(LivingRoom|Bedroom|Kitchen)_Day\d+'
+    """檢查檔案名稱是否包含 房間名_DayX 格式（例如 Bedroom_Day1）"""
+    pattern = r'[A-Za-z]+_Day\d+'
     return bool(re.search(pattern, file_name))
 
 # ============================
